@@ -1,7 +1,8 @@
-package controller;
+package br.com.food_connect.Food_Connect.rest.controller;
 
 import jakarta.validation.Valid;
 import model.dto.ApiResponse;
+import model.dto.ChangePassword;
 import model.dto.UserRequest;
 import model.dto.UserResponse;
 import org.springframework.data.domain.Page;
@@ -58,6 +59,14 @@ public class UserController {
 
         return ResponseEntity.ok(usersService.delete(id));
 
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<ApiResponse> changePassword(
+            @RequestBody @Valid ChangePassword request) {
+
+        ApiResponse response = usersService.changePassword(request);
+        return ResponseEntity.ok(response);
     }
 
 

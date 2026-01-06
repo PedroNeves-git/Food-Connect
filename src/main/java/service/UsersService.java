@@ -1,19 +1,20 @@
 package service;
 
 import jakarta.transaction.Transactional;
-import model.User;
+import model.dto.ChangePassword;
+import model.entity.UserEntity;
 import model.dto.ApiResponse;
 import model.dto.UserRequest;
 import model.dto.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import repository.UserRepository;
 
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
@@ -21,6 +22,9 @@ public class UsersService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Page<UserResponse> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
@@ -32,7 +36,7 @@ public class UsersService {
     }
 
     public UserResponse findById(Long id) {
-        User user = userRepository.findById(id)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return new UserResponse(
@@ -48,11 +52,11 @@ public class UsersService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setName(request.name());
         user.setEmail(request.email());
 
-        User saved = userRepository.save(user);
+        UserEntity saved = userRepository.save(user);
 
         return new UserResponse(
                 saved.getId(),
@@ -62,13 +66,13 @@ public class UsersService {
     }
 
     public UserResponse update(Long id, UserRequest request) {
-        User user = userRepository.findById(id)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setName(request.name());
         user.setEmail(request.email());
 
-        User updated = userRepository.save(user);
+        UserEntity updated = userRepository.save(user);
 
         return new UserResponse(
                 updated.getId(),
@@ -89,4 +93,27 @@ public class UsersService {
         );
     }
 
+    public ApiResponse changePassword(ChangePassword request) {
+
+        UserEntity user = userRepository.findByEmail(request.email());
+
+        if (user == null) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+            throw new RuntimeException("Senha atual inválida");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        user.setModifiedDate(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return new ApiResponse(
+                "Senha alterada com sucesso",
+                LocalDateTime.now()
+        );
+    }
 }
+

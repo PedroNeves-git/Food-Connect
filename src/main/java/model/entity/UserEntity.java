@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,31 +12,31 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Email
     @Column(name = "email")
-    String email;
+    private String email;
 
     @Column(name = "login")
-    String login;
+    private String login;
 
     @Column(name = "password")
-    String password;
+    private String password;
 
     @Column(name = "modified_date")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    LocalDateTime modifiedDate;
+    private LocalDateTime modifiedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    TypeUser typeUser;
+    private TypeUser typeUser;
 
 }

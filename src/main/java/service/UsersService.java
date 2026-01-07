@@ -1,5 +1,6 @@
 package service;
 
+import exceptions.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import model.User;
 import model.dto.ApiResponse;
@@ -87,6 +88,11 @@ public class UsersService {
                 "User deleted successfully",
                 LocalDateTime.now()
         );
+    }
+
+    public User findEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
 }

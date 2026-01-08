@@ -1,8 +1,9 @@
-package model;
+package br.com.food_connect.Food_Connect.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -31,9 +32,9 @@ public class User {
     @Column(name = "password")
     String password;
 
+    @UpdateTimestamp
     @Column(name = "modified_date")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    LocalDateTime modifiedDate;
+    private LocalDateTime modifiedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

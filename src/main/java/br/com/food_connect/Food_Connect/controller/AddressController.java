@@ -1,19 +1,18 @@
-package controller;
+package br.com.food_connect.Food_Connect.controller;
 
+import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
 import jakarta.validation.Valid;
-import model.Address;
-import model.dto.AddressPutRequestDTO;
-import model.dto.AddressRequestDTO;
-import model.dto.AddressResponseDTO;
-import org.springframework.data.domain.Page;
+import br.com.food_connect.Food_Connect.model.Address;
+import br.com.food_connect.Food_Connect.model.dto.AddressPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.AddressRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.AddressResponseDTO;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AddressService;
+import br.com.food_connect.Food_Connect.service.AddressService;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/address")
@@ -26,7 +25,7 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Address>> getAddresses(
+    public ResponseEntity<List<AddressResponseDTO>> getAddresses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
@@ -34,12 +33,13 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Address> findById(
+    public ResponseEntity<AddressResponseDTO> findById(
             @PathVariable Long id
     )
     {
-        Address address = addressService.findById(id);
-        return ResponseEntity.ok(address);
+        return ResponseEntity.ok(
+                addressService.findById(id)
+        );
     }
 
     @GetMapping("/user/{userId}")
@@ -52,41 +52,41 @@ public class AddressController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(
+    public ResponseEntity<AddressResponseDTO> save(
             @Valid @RequestBody AddressRequestDTO addressRequestDTO
     ) {
         Address saved = addressService.saveAddress(addressRequestDTO);
 
-        URI location = URI.create("/addresses/" + saved.getId());
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new AddressResponseDTO(saved));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(
+    public ResponseEntity<ApiResponse> delete(
             @PathVariable Long id
     )
     {
-        this.addressService.deleteAddress(id);
+        return ResponseEntity.ok(this.addressService.deleteAddress(id));
     }
 
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAllAddressesOfUser(
+    public ResponseEntity<ApiResponse> deleteAllAddressesOfUser(
             @PathVariable Long userId
     )
     {
-        this.addressService.deleteAllAddressesOfUser(userId);
+        return ResponseEntity.ok(this.addressService.deleteAllAddressesOfUser(userId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<AddressResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody AddressPutRequestDTO addressPutRequestDTO
     )
     {
-        this.addressService.updateAddress(addressPutRequestDTO, id);
-        return ResponseEntity.noContent().build();
+        AddressResponseDTO updatedAddress = this.addressService.updateAddress(addressPutRequestDTO, id);
+        return ResponseEntity.ok(updatedAddress);
     }
 }

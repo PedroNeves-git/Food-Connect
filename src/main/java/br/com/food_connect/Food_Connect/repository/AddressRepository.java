@@ -1,6 +1,6 @@
-package repository;
+package br.com.food_connect.Food_Connect.repository;
 
-import model.Address;
+import br.com.food_connect.Food_Connect.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

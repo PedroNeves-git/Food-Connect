@@ -1,7 +1,8 @@
-package model.dto;
+package br.com.food_connect.Food_Connect.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record AddressRequestDTO(
         @NotBlank @NotNull(message = "O nome da rua não pode ser nulo.")
@@ -11,7 +12,8 @@ public record AddressRequestDTO(
         String state,
         String zipCode,
         String complement,
-        @NotBlank @NotNull(message = "O ID do usuário não pode ser nulo.")
+        @NotNull(message = "O ID do usuário não pode ser nulo.")
+        @Positive(message = "O ID do usuário deve ser positivo.")
         Long user_id
 ) {
 }

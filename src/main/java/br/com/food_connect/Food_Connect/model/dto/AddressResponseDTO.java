@@ -1,6 +1,6 @@
-package model.dto;
+package br.com.food_connect.Food_Connect.model.dto;
 
-import model.Address;
+import br.com.food_connect.Food_Connect.model.Address;
 
 public record AddressResponseDTO(
         Long id,
@@ -9,7 +9,8 @@ public record AddressResponseDTO(
         String city,
         String state,
         String zipCode,
-        String complement
+        String complement,
+        Long user_id
 ) {
     public AddressResponseDTO(Address address) {
         this(
@@ -19,7 +20,8 @@ public record AddressResponseDTO(
                 address.getCity(),
                 address.getState(),
                 address.getZipCode(),
-                address.getComplement()
+                address.getComplement(),
+                address.getUser().getId()
         );
     }
 }

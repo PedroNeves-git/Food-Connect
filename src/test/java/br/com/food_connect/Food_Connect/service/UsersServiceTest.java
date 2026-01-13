@@ -87,5 +87,41 @@ class UsersServiceTest {
 
     }
 
-    
+
+    @Test
+    void givenRequest_whenCreate_thenCreateUser(){
+
+    }
+
+
+    @Test
+    void givenRequest_whenCreate_thenThrowEmailAlreadyInUse(){
+
+    }
+
+    @Test
+    void givenRequestAndUserId_whenUpdate_thenUpdateUser(){
+
+    }
+
+    @Test
+    void givenInvalidId_whenUpdate_thenThowUserNotFoundException(){
+
+    }
+
+    @Test
+    void givenAnExistentEmail_whenUpdate_thenThowEmailAlreadyInUse(){
+
+    }
+
+
+    @Test
+    void givenAnId_whenDelete_thenDeleteUser(){
+
+    }
+
+    @Test
+    void givenAnInvalidId_whenDelete_thenThowUserNotFoundException(){
+
+    }
 }

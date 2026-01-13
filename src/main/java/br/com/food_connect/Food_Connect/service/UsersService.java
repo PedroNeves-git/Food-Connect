@@ -10,6 +10,7 @@ import br.com.food_connect.Food_Connect.model.dto.UserRequestDTO;
 import br.com.food_connect.Food_Connect.model.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.food_connect.Food_Connect.repository.UserRepository;
 
@@ -22,6 +23,9 @@ public class UsersService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponseDTO> findAll(int page, int size) {
         return userRepository
@@ -56,7 +60,9 @@ public class UsersService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setLogin(request.login());
-        user.setPassword(request.password());
+
+        user.setPassword(passwordEncoder.encode(request.password()));
+
         user.setTypeUser(request.typeUser());
 
         userRepository.save(user);
@@ -67,6 +73,7 @@ public class UsersService {
                 user.getEmail()
         );
     }
+
 
     @Transactional
     public UserResponseDTO update(Long id, UserPutRequestDTO request) {

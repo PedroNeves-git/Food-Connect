@@ -1,4 +1,4 @@
-package model.entity;
+package br.com.food_connect.Food_Connect.model;
 
 public enum TypeUser {
 

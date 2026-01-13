@@ -1,9 +1,9 @@
-package model.entity;
+package br.com.food_connect.Food_Connect.model;
 
+import br.com.food_connect.Food_Connect.model.TypeUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

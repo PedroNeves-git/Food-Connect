@@ -1,13 +1,11 @@
 package br.com.food_connect.Food_Connect.controller;
 
-import br.com.food_connect.Food_Connect.model.dto.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.*;
 import jakarta.validation.Valid;
-import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
-import br.com.food_connect.Food_Connect.model.dto.UserRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import br.com.food_connect.Food_Connect.service.UsersService;
 
@@ -49,6 +47,17 @@ public class UserController {
     ) {
         return this.usersService.update(id, request);
     }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Void> changePassword(
+            @RequestBody @Valid ChangePasswordDTO request,
+            Authentication authentication
+    ) {
+        String login = authentication.getName(); // vem do JWT (subject)
+        usersService.changePassword(login, request);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

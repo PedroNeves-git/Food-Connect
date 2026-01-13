@@ -50,7 +50,7 @@ public class User implements UserDetails {
         if (this.typeUser == TypeUser.RESTAURANT_OWNER)
             return List.of(new SimpleGrantedAuthority("ROLE_RESTAURANT_OWNER"),
                 new SimpleGrantedAuthority("ROLE_CLIENT"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
     }
 
     @Override

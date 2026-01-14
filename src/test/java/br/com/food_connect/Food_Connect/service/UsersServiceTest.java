@@ -1,5 +1,6 @@
 package br.com.food_connect.Food_Connect.service;
 
+import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
 import br.com.food_connect.Food_Connect.factory.UserFactory;
 import br.com.food_connect.Food_Connect.model.User;
@@ -37,11 +38,13 @@ class UsersServiceTest {
     private int PAGE_SIZE = 10;
     private int PAGE = 1;
     private long ID = 1l;
+    private String SAME_EMAIL= "email";
+    private String DIFFERENT_EMAIL= "different_email";
 
 
     @BeforeEach
     void setUp() {
-        user = UserFactory.create();
+        user = UserFactory.createUser();
     }
 
     @Test
@@ -90,38 +93,92 @@ class UsersServiceTest {
 
     @Test
     void givenRequest_whenCreate_thenCreateUser(){
+        when(userRepository.existsByEmail(anyString())).thenReturn(false);
+        when(userRepository.save(any())).thenReturn(user);
+
+        classUnderTest.create(UserFactory.createUserRequest());
 
     }
 
 
     @Test
     void givenRequest_whenCreate_thenThrowEmailAlreadyInUse(){
+        when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
+        assertThrows(EmailAlreadyInUse.class, () -> {
+            classUnderTest.create(UserFactory.createUserRequest());
+        });
     }
 
     @Test
     void givenRequestAndUserId_whenUpdate_thenUpdateUser(){
+        when(userRepository.findById(anyLong())).thenReturn(ofNullable(user));
+        lenient().when(userRepository.existsByEmail(anyString())).thenReturn(false);
+
+
+        assertDoesNotThrow(() -> {
+            classUnderTest.update(ID, UserFactory.createUserPutRequest(SAME_EMAIL));
+        });
 
     }
 
     @Test
     void givenInvalidId_whenUpdate_thenThowUserNotFoundException(){
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
+        assertThrows(UserNotFoundException.class, () -> {
+            classUnderTest.update(ID, UserFactory.createUserPutRequest(SAME_EMAIL));
+        });
     }
 
     @Test
     void givenAnExistentEmail_whenUpdate_thenThowEmailAlreadyInUse(){
+        when(userRepository.findById(anyLong())).thenReturn(ofNullable(user));
+        when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
+        assertThrows(EmailAlreadyInUse.class, () -> {
+            classUnderTest.update(ID, UserFactory.createUserPutRequest(DIFFERENT_EMAIL));
+        });
     }
 
 
     @Test
     void givenAnId_whenDelete_thenDeleteUser(){
+        when(userRepository.existsById(anyLong())).thenReturn(true);
 
+        assertDoesNotThrow(() -> {
+            classUnderTest.delete(ID);
+        });
+
+        verify(userRepository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void givenAnInvalidId_whenDelete_thenThowUserNotFoundException(){
+        when(userRepository.existsById(anyLong())).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> {
+            classUnderTest.delete(ID);
+        });
+    }
+
+
+    @Test
+    void givenAnId_whenFindEntityById_thenreturnUser(){
+        when(userRepository.findById(anyLong())).thenReturn(ofNullable(user));
+
+        assertDoesNotThrow(() -> {
+            classUnderTest.findEntityById(ID);
+        });
+    }
+
+    @Test
+    void givenAnInvalidId_whenFindEntityById_thenThrowUserNotFoundException(){
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> {
+            classUnderTest.findEntityById(ID);
+        });
 
     }
 }

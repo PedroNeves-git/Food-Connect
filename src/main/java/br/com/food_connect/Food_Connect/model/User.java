@@ -4,6 +4,7 @@ import br.com.food_connect.Food_Connect.model.TypeUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,8 +38,8 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @CreationTimestamp
     @Column(name = "modified_date")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private LocalDateTime modifiedDate;
 
     @Enumerated(EnumType.STRING)

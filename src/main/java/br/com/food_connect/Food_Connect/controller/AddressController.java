@@ -1,6 +1,7 @@
 package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import br.com.food_connect.Food_Connect.model.Address;
 import br.com.food_connect.Food_Connect.model.dto.AddressPutRequestDTO;
@@ -24,6 +25,7 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    @Operation(summary = "List all addresses with pagination")
     @GetMapping
     public ResponseEntity<List<AddressResponseDTO>> getAddresses(
             @RequestParam(defaultValue = "0") int page,
@@ -32,6 +34,7 @@ public class AddressController {
         return ResponseEntity.ok(addressService.findAll(page, size));
     }
 
+    @Operation(summary = "Find address by ID")
     @GetMapping("/{id}")
     public ResponseEntity<AddressResponseDTO> findById(
             @PathVariable Long id
@@ -42,6 +45,7 @@ public class AddressController {
         );
     }
 
+    @Operation(summary = "Find addresses by User ID")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<AddressResponseDTO>> findByUserId(
             @PathVariable Long userId
@@ -51,6 +55,7 @@ public class AddressController {
         return ResponseEntity.ok(address);
     }
 
+    @Operation(summary = "Create a new address")
     @PostMapping
     public ResponseEntity<AddressResponseDTO> save(
             @Valid @RequestBody AddressRequestDTO addressRequestDTO
@@ -62,6 +67,7 @@ public class AddressController {
                 .body(new AddressResponseDTO(saved));
     }
 
+    @Operation(summary = "Delete an address by ID")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ApiResponse> delete(
@@ -71,6 +77,7 @@ public class AddressController {
         return ResponseEntity.ok(this.addressService.deleteAddress(id));
     }
 
+    @Operation(summary = "Delete all addresses of a specific user")
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ApiResponse> deleteAllAddressesOfUser(
@@ -80,6 +87,7 @@ public class AddressController {
         return ResponseEntity.ok(this.addressService.deleteAllAddressesOfUser(userId));
     }
 
+    @Operation(summary = "Update address data")
     @PutMapping("/{id}")
     public ResponseEntity<AddressResponseDTO> update(
             @PathVariable Long id,

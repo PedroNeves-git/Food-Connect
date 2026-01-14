@@ -2,14 +2,12 @@ package br.com.food_connect.Food_Connect.service;
 
 import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
-import br.com.food_connect.Food_Connect.model.dto.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.*;
 import jakarta.transaction.Transactional;
 import br.com.food_connect.Food_Connect.model.User;
-import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
-import br.com.food_connect.Food_Connect.model.dto.UserRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.food_connect.Food_Connect.repository.UserRepository;
 
@@ -22,6 +20,9 @@ public class UsersService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponseDTO> findAll(int page, int size) {
         return userRepository
@@ -56,7 +57,9 @@ public class UsersService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setLogin(request.login());
-        user.setPassword(request.password());
+
+        user.setPassword(passwordEncoder.encode(request.password()));
+
         user.setTypeUser(request.typeUser());
 
         userRepository.save(user);
@@ -109,8 +112,25 @@ public class UsersService {
         );
     }
 
+    @Transactional
+    public void changePassword(String login, ChangePasswordDTO request) {
+
+        User user = userRepository.findByLogin(login);
+
+        if (user == null) {
+            throw new UserNotFoundException("Usuário não encontrado");
+        }
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+    }
     public User findEntityById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
+
 }

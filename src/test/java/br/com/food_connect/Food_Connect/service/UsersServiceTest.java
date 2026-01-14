@@ -34,6 +34,9 @@ class UsersServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     private User user;
     private int PAGE_SIZE = 10;
     private int PAGE = 1;

@@ -76,7 +76,7 @@ docker-compose up --build
       <div>
         <img src="https://avatars.githubusercontent.com/GuiFonsCode" width="120px;" alt="Foto no GitHub" class="profile"/><br>
           <b> Guilherme Fonseca   </b><br>
-            <a href="" alt="Linkedin"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="20"></a>
+            <a href="https://www.linkedin.com/in/guifonseca1212/" alt="Linkedin"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="20"></a>
             <a href="https://github.com/GuiFonsCode" alt="Github"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" height="20"></a>
       </div>
     </td>
@@ -84,7 +84,7 @@ docker-compose up --build
       <div>
         <img src="https://avatars.githubusercontent.com/guilhermedsantoslima" width="120px;" alt="Foto no GitHub" class="profile"/><br>
           <b> Guilherme Lima   </b><br>
-            <a href="" alt="Linkedin"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="20"></a>
+            <a href="https://www.linkedin.com/in/guilherme-lima-007075243/" alt="Linkedin"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" height="20"></a>
             <a href="https://github.com/guilhermedsantoslima" alt="Github"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" height="20"></a>
       </div>
     </td>

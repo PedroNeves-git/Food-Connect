@@ -4,9 +4,9 @@ import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import br.com.food_connect.Food_Connect.model.Address;
-import br.com.food_connect.Food_Connect.model.dto.AddressPutRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressResponseDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressResponseDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

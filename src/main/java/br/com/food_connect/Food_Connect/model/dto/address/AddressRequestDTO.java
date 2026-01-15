@@ -1,4 +1,4 @@
-package br.com.food_connect.Food_Connect.model.dto;
+package br.com.food_connect.Food_Connect.model.dto.address;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

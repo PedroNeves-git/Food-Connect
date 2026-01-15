@@ -2,6 +2,7 @@ package br.com.food_connect.Food_Connect.service;
 
 import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
 import br.com.food_connect.Food_Connect.exceptions.InvalidPasswordException;
+import br.com.food_connect.Food_Connect.exceptions.LoginAlreadyInUse;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
 import br.com.food_connect.Food_Connect.model.dto.*;
 import br.com.food_connect.Food_Connect.model.dto.user.ChangePasswordDTO;
@@ -56,6 +57,10 @@ public class UsersService {
 
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyInUse(String.format("Email '%s' is already in use.", request.email()));
+        }
+
+        if (userRepository.existsByLogin(request.login())) {
+            throw new LoginAlreadyInUse(String.format("Login '%s' is already in use.", request.login()));
         }
 
         User user = new User();

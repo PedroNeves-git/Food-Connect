@@ -1,9 +1,6 @@
 package br.com.food_connect.Food_Connect.controller;
 
-import br.com.food_connect.Food_Connect.exceptions.AddressNotFoundException;
-import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
-import br.com.food_connect.Food_Connect.exceptions.InvalidPasswordException;
-import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
+import br.com.food_connect.Food_Connect.exceptions.*;
 import br.com.food_connect.Food_Connect.model.dto.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -61,6 +58,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailAlreadyInUse.class)
     public ProblemDetail handleEmailConflict(
             EmailAlreadyInUse e
+    ) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+
+        problemDetail.setTitle("Data Conflict");
+        problemDetail.setDetail(e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(LoginAlreadyInUse.class)
+    public ProblemDetail handleLoginConflict(
+            LoginAlreadyInUse e
     ) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
 

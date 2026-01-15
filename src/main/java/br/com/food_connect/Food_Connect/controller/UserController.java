@@ -24,7 +24,7 @@ public class UserController {
     UsersService usersService;
 
     @Operation(summary = "List all users with pagination")
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<UserResponseDTO>> listUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -76,9 +76,9 @@ public class UserController {
     }
 
     @Operation(summary = "Search users by name")
-    @GetMapping("/name/{name}")
+    @GetMapping("/name")
     public ResponseEntity<List<UserResponseDTO>> searchByName(
-            @RequestParam String name,
+            @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

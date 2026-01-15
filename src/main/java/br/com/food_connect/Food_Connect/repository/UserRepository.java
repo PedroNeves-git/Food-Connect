@@ -12,5 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(@NotBlank @Email String email);
 
+    boolean existsByLogin(@NotBlank String login);
+
     Page<User> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

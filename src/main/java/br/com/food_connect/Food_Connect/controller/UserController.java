@@ -1,6 +1,10 @@
 package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.model.dto.*;
+import br.com.food_connect.Food_Connect.model.dto.user.ChangePasswordDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,7 @@ public class UserController {
     UsersService usersService;
 
     @Operation(summary = "List all users with pagination")
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<UserResponseDTO>> listUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
@@ -55,13 +59,13 @@ public class UserController {
 
     @Operation(summary = "Change user password")
     @PutMapping("/change-password")
-    public ResponseEntity<Void> changePassword(
+    public ResponseEntity<ApiResponse> changePassword(
             @RequestBody @Valid ChangePasswordDTO request,
             Authentication authentication
     ) {
-        String login = authentication.getName(); // vem do JWT (subject)
+        String login = authentication.getName();
         usersService.changePassword(login, request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse("Password changed successfully!"));
     }
 
     @Operation(summary = "Delete a user")
@@ -69,5 +73,15 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return ResponseEntity.ok(usersService.delete(id));
+    }
+
+    @Operation(summary = "Search users by name")
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<UserResponseDTO>> searchByName(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(usersService.searchByName(name, page, size));
     }
 }

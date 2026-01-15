@@ -1,8 +1,13 @@
 package br.com.food_connect.Food_Connect.service;
 
 import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
+import br.com.food_connect.Food_Connect.exceptions.InvalidPasswordException;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
 import br.com.food_connect.Food_Connect.model.dto.*;
+import br.com.food_connect.Food_Connect.model.dto.user.ChangePasswordDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserResponseDTO;
 import jakarta.transaction.Transactional;
 import br.com.food_connect.Food_Connect.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +55,7 @@ public class UsersService {
     public UserResponseDTO create(UserRequestDTO request) {
 
         if (userRepository.existsByEmail(request.email())) {
-            throw new EmailAlreadyInUse(request.email());
+            throw new EmailAlreadyInUse(String.format("Email '%s' is already in use.", request.email()));
         }
 
         User user = new User();
@@ -76,19 +81,15 @@ public class UsersService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        if (!user.getEmail().equals(request.email()) && userRepository.existsByEmail(request.email())) {
-            throw new EmailAlreadyInUse(request.email());
-        }
-
         updateIfPresent(request.name(), user::setName);
         updateIfPresent(request.login(), user::setLogin);
 
-        updateIfPresent(request.email(), email -> {
-            if (!user.getEmail().equals(email) && userRepository.existsByEmail(email)) {
-                throw new EmailAlreadyInUse(email);
+        if (request.email() != null && !request.email().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(request.email())) {
+                throw new EmailAlreadyInUse(String.format("Email '%s' is already in use.", request.email()));
             }
-            user.setEmail(email);
-        });
+            user.setEmail(request.email());
+        }
 
         updateIfPresent(request.typeUser(), user::setTypeUser);
 
@@ -118,11 +119,15 @@ public class UsersService {
         User user = userRepository.findByLogin(login);
 
         if (user == null) {
-            throw new UserNotFoundException("Usuário não encontrado");
+            throw new UserNotFoundException("User not found");
         }
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
-            throw new RuntimeException("Senha atual incorreta");
+            throw new InvalidPasswordException("The current password provided is incorrect.");
+        }
+
+        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("The new password cannot be the same as the current password.");
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
@@ -133,4 +138,18 @@ public class UsersService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public List<UserResponseDTO> searchByName(String name, int page, int size) {
+        if (name == null || name.trim().isBlank()) {
+            throw new IllegalArgumentException("Search term cannot be empty.");
+        }
+
+        return userRepository
+                .findByNameContainingIgnoreCase(name, PageRequest.of(page, size))
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail()
+                ))
+                .getContent();
+    }
 }

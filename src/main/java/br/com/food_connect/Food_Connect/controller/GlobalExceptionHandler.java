@@ -2,14 +2,18 @@ package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.exceptions.AddressNotFoundException;
 import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
+import br.com.food_connect.Food_Connect.exceptions.InvalidPasswordException;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
 import br.com.food_connect.Food_Connect.model.dto.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,15 +59,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailAlreadyInUse.class)
-    public ResponseEntity<?> handleAddressNotFound(
+    public ProblemDetail handleEmailConflict(
             EmailAlreadyInUse e
     ) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(Map.of(
-                        "status", 404,
-                        "error", "Email already in use.",
-                        "message", e.getMessage()
-                ));
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+
+        problemDetail.setTitle("Data Conflict");
+        problemDetail.setDetail(e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail handleBadCredentials(BadCredentialsException e) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+
+        problemDetail.setTitle("Authentication Failure");
+        problemDetail.setDetail("Invalid username or password.");
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ProblemDetail handleInvalidPassword(InvalidPasswordException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setTitle("Password Validation Error");
+        problemDetail.setDetail(e.getMessage());
+        return problemDetail;
     }
 }

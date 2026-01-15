@@ -1,4 +1,4 @@
-package br.com.food_connect.Food_Connect.model.dto;
+package br.com.food_connect.Food_Connect.model.dto.address;
 
 import br.com.food_connect.Food_Connect.model.Address;
 

@@ -87,7 +87,15 @@ public class UsersService {
                 .orElseThrow(() -> new UserNotFoundException(id));
 
         updateIfPresent(request.name(), user::setName);
-        updateIfPresent(request.login(), user::setLogin);
+
+        if (request.login() != null && !request.login().equals(user.getLogin())) {
+            if (userRepository.existsByLogin(request.login())) {
+                throw new LoginAlreadyInUse(
+                        String.format("Login '%s' is already in use.", request.login())
+                );
+            }
+            user.setLogin(request.login());
+        }
 
         if (request.email() != null && !request.email().equals(user.getEmail())) {
             if (userRepository.existsByEmail(request.email())) {

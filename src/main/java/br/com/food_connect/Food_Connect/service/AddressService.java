@@ -102,8 +102,7 @@ public class AddressService {
     @Transactional
     public AddressResponseDTO updateAddress(AddressPutRequestDTO dto, Long id) {
 
-        Address address = addressRepository.findById(id)
-                .orElseThrow(() -> new AddressNotFoundException(id));
+        Address address = addressRepository.findById(id).orElseThrow(() -> new AddressNotFoundException(id));
 
         updateIfPresent(dto.street(), address::setStreet);
         updateIfPresent(dto.neighborhood(), address::setNeighborhood);
@@ -112,6 +111,8 @@ public class AddressService {
         updateIfPresent(dto.zipCode(), address::setZipCode);
         updateIfPresent(dto.complement(), address::setComplement);
 
-        return new AddressResponseDTO(address);
+        Address updatedAddress = addressRepository.save(address);
+
+        return new AddressResponseDTO(updatedAddress);
     }
 }

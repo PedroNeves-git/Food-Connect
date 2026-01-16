@@ -154,7 +154,7 @@ class AddressServiceTest {
     @Test
     void givenAnAdressRequestAndAnId_whenUpdateAddress_thenReturnAnAdressResponse() {
         when(addressRepository.findById(anyLong())).thenReturn(ofNullable(address));
-        when(addressRepository.save(any())).thenReturn(address);
+        when(addressRepository.save(any(Address.class))).thenReturn(address);
 
         assertDoesNotThrow(() -> {
             classUnderTest.updateAddress(addressPutRequest,ID);

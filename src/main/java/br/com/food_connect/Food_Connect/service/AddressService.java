@@ -111,6 +111,8 @@ public class AddressService {
         updateIfPresent(dto.zipCode(), address::setZipCode);
         updateIfPresent(dto.complement(), address::setComplement);
 
-        return new AddressResponseDTO(address);
+        Address updatedAddress = addressRepository.save(address);
+
+        return new AddressResponseDTO(updatedAddress);
     }
 }

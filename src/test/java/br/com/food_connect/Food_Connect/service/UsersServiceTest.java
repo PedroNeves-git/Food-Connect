@@ -2,12 +2,13 @@ package br.com.food_connect.Food_Connect.service;
 
 import br.com.food_connect.Food_Connect.exceptions.EmailAlreadyInUse;
 import br.com.food_connect.Food_Connect.exceptions.UserNotFoundException;
+import br.com.food_connect.Food_Connect.factory.ChangePasswordFactory;
 import br.com.food_connect.Food_Connect.factory.UserFactory;
 import br.com.food_connect.Food_Connect.model.User;
 import br.com.food_connect.Food_Connect.repository.UserRepository;
 
 import static java.util.Optional.ofNullable;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -164,6 +165,42 @@ class UsersServiceTest {
             classUnderTest.delete(ID);
         });
     }
+
+
+    @Test
+    void givenAnLoginAndChangePasswordRequest_whenChangePassword_thenUpdatePassword() {
+        when(userRepository.findByLogin(anyString())).thenReturn(user);
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(userRepository.save(any())).thenReturn(user);
+
+        assertDoesNotThrow(() -> {
+            classUnderTest.changePassword(user.getLogin(), ChangePasswordFactory.create());
+        });
+
+    }
+
+
+    @Test
+    void givenAnLoginAndChangePasswordRequestWithInvalidLogin_whenChangePassword_theThrowUserNotFoundException() {
+        when(userRepository.findByLogin(anyString())).thenReturn(null);
+
+        assertThrows(UserNotFoundException.class, () -> {
+            classUnderTest.changePassword(user.getLogin(), ChangePasswordFactory.create());
+        });
+
+    }
+
+    @Test
+    void givenAnLoginAndSamePassword_whenChangePassword_theThrowRuntimeException() {
+        when(userRepository.findByLogin(anyString())).thenReturn(user);
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        assertThrows(RuntimeException.class, () -> {
+            classUnderTest.changePassword(user.getLogin(), ChangePasswordFactory.create());
+        });
+
+    }
+
 
 
     @Test

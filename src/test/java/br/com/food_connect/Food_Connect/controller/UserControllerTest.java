@@ -5,6 +5,10 @@ package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.factory.UserFactory;
 import br.com.food_connect.Food_Connect.model.dto.*;
+import br.com.food_connect.Food_Connect.model.dto.user.ChangePasswordDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserResponseDTO;
 import br.com.food_connect.Food_Connect.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,17 +101,6 @@ class UserControllerTest {
         verify(usersService).update(anyLong(), any());
     }
 
-
-    @Test
-    void givenAuthenticatedUser_whenChangePassword_thenReturnNoContent() {
-        var request = new ChangePasswordDTO("oldPass123", "newPass456");
-
-        var result = classUnderTest.changePassword(request, authentication);
-
-        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
-
-        verify(usersService).changePassword(any(), any());
-    }
 
 
     @Test

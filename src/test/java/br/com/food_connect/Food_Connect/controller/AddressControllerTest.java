@@ -3,9 +3,9 @@ package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.factory.AddressFactory;
 import br.com.food_connect.Food_Connect.model.Address;
-import br.com.food_connect.Food_Connect.model.dto.AddressPutRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressResponseDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressResponseDTO;
 import br.com.food_connect.Food_Connect.model.dto.ApiResponse;
 import br.com.food_connect.Food_Connect.service.AddressService;
 import org.junit.jupiter.api.BeforeEach;

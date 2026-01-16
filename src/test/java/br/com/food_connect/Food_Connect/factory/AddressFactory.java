@@ -1,10 +1,9 @@
 package br.com.food_connect.Food_Connect.factory;
 
 import br.com.food_connect.Food_Connect.model.Address;
-import br.com.food_connect.Food_Connect.model.dto.AddressPutRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.AddressResponseDTO;
-import br.com.food_connect.Food_Connect.model.dto.UserResponseDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.address.AddressResponseDTO;
 
 public class AddressFactory {
     public static Address create() {

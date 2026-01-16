@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -38,9 +39,9 @@ class AuthorizationServiceTest {
     void givenAnInvalidUsername_whenLoadUserByUsername_ThenThrowsUsernameNotFoundException(){
         when(userRepository.findByLogin(anyString())).thenReturn(null);
 
-        var result = classUnderTest.loadUserByUsername("any");
-
-        assert result == null;
+        assertThrows(UsernameNotFoundException.class, () -> {
+            classUnderTest.loadUserByUsername("any");
+        });
 
     }
 

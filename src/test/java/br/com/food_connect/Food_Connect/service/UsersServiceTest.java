@@ -169,14 +169,18 @@ class UsersServiceTest {
 
     @Test
     void givenAnLoginAndChangePasswordRequest_whenChangePassword_thenUpdatePassword() {
+        var request = ChangePasswordFactory.create();
+        user.setPassword("encodedOldPassword");
+
         when(userRepository.findByLogin(anyString())).thenReturn(user);
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(passwordEncoder.matches(eq(request.currentPassword()), eq(user.getPassword()))).thenReturn(true);
+        when(passwordEncoder.matches(eq(request.newPassword()), eq(user.getPassword()))).thenReturn(false);
+        when(passwordEncoder.encode(request.newPassword())).thenReturn("encodedNewPassword");
         when(userRepository.save(any())).thenReturn(user);
 
         assertDoesNotThrow(() -> {
-            classUnderTest.changePassword(user.getLogin(), ChangePasswordFactory.create());
+            classUnderTest.changePassword(user.getLogin(), request);
         });
-
     }
 
 

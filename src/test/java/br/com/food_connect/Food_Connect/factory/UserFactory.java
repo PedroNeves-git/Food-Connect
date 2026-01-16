@@ -2,9 +2,9 @@ package br.com.food_connect.Food_Connect.factory;
 
 import br.com.food_connect.Food_Connect.model.TypeUser;
 import br.com.food_connect.Food_Connect.model.User;
-import br.com.food_connect.Food_Connect.model.dto.UserPutRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.UserRequestDTO;
-import br.com.food_connect.Food_Connect.model.dto.UserResponseDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserPutRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserRequestDTO;
+import br.com.food_connect.Food_Connect.model.dto.user.UserResponseDTO;
 
 import static java.time.LocalDateTime.now;
 

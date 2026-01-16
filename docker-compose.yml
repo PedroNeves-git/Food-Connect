@@ -20,6 +20,7 @@ services:
       retries: 5
 
   app:
+    image: food-connect-api
     build: .
     container_name: food-connect
     restart: always
@@ -32,7 +33,6 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev
-    command: ["java", "-jar", "app.jar"]
 
 volumes:
   db_data:

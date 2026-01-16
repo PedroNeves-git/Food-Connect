@@ -38,7 +38,7 @@ INSERT INTO users (
     'joao.silva@email.com',
     'joaosilva',
     '123',
-    'USER'
+    'CLIENT'
 );
 
 INSERT INTO user_address (

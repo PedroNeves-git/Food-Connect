@@ -1,8 +1,8 @@
 package br.com.food_connect.Food_Connect.controller;
 
 import br.com.food_connect.Food_Connect.model.User;
-import br.com.food_connect.Food_Connect.model.dto.LoginDTO;
-import br.com.food_connect.Food_Connect.model.dto.LoginResponseDTO;
+import br.com.food_connect.Food_Connect.model.dto.login.LoginDTO;
+import br.com.food_connect.Food_Connect.model.dto.login.LoginResponseDTO;
 import br.com.food_connect.Food_Connect.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -31,6 +31,6 @@ public class LoginController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, "Login Successful"));
     }
 }
